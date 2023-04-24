@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> 
-#include <ctype.h>
 
 ///@param gf = Gänsefüße!"
 const char gf = '"';
