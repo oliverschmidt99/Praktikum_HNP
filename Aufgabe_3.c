@@ -84,7 +84,7 @@ printf("\n");
     * @brief Bestimmt die Länge von dem ersten String und gibt die Länge + 1 zurück.
     *        Die Zeichenkette muss um 1 erhöht werden, wegen dem NULLByte.
     */
-    länge_string_1 = strlen(argv[1]) + 1;
+    länge_string_1 = strlen(argv[1])+1;
 
     /**
      * @brief Die Zeichenkette muss auf dem Heap gespeicht werden
@@ -97,7 +97,7 @@ printf("\n");
     strcpy(kopie_string_1, argv[1]);
 
 
-    if(*kopie_string_1 == 0)                     
+    if(*argv[1] == 0)                     
     {
         printf("Usage: %s <empty> <string 2>\n\n", argv[0]);
         return 1;                        
@@ -108,22 +108,18 @@ printf("\n");
     }
 
 
-    printf("Laenge der Zeichenkette (inkl. \\0): %zu Byte(s)\n", (size_t)länge_string_1);
-    printf("Suchkriterium: '%s'\n\n", argv[2]);
+    printf("Laenge der Zeichenkette (inkl. \\0): \x1B[32m%zu\x1B[0m Byte(s)\n", (size_t)länge_string_1);
+    printf("Suchkriterium: '\x1B[35m%s\x1B[0m'\n\n", argv[2]);
 
     memdump(kopie_string_1, länge_string_1);
     adresse = kopie_string_1;
 
-    if(argv[2] != 0){
+    
         anzahl = findstring(argv[2], &adresse);
-    }
-    else{
-        anzahl = 0;
-        adresse = 0;
-    }
+   
+    
 
-
-    printf("Die Suchzeichenkette wurde %d mal gefunden. (Zuerst an der Addresse: %p)\n", anzahl, adresse);
+    printf("Die Suchzeichenkette '\x1B[35m%s\x1B[0m' wurde %d mal gefunden in: '\x1B[36m%s\x1B[0m'. (Zuerst an der Addresse: %p)\n", argv[2], anzahl, argv[1], adresse);
     free(kopie_string_1);
     }
 
@@ -157,7 +153,7 @@ int k = 0x0;
     printf("ADDR\t\t0123456789ABCDEF\n");
 
     /*Die Schleife zählt die Zeilen, bis die länge_string erreicht ist. Die Adresse
-    wird um 0xF aufaddiert, da sie nicht bei null anfangen darf.
+    wird um 0x10 aufaddiert, da sie nicht bei null anfangen darf.
     */
     for(i = 0x0; i < länge_string; i += 0x10){
         printf("%p\t", &kopie_string_1[i]);
@@ -204,7 +200,7 @@ char *gefunden = strstr(*pointer_adresse, sucher_string_2);
 
     while(gefunden){
         zähler ++;
-        gefunden = strstr(gefunden+1, sucher_string_2);
+        gefunden = strstr(gefunden+0x1, sucher_string_2);
     }
 
 return zähler;
