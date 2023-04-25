@@ -194,13 +194,13 @@ return;
 int findstring(char *sucher_string_2, char **pointer_adresse){
 
 int zähler = 0;
-char *gefunden = strstr(*pointer_adresse, sucher_string_2);
-*pointer_adresse = gefunden;
+char *fundort_adresse = strstr(*pointer_adresse, sucher_string_2);
+*pointer_adresse = fundort_adresse;
 
 
-    while(gefunden){
+    while(fundort_adresse){
         zähler ++;
-        gefunden = strstr(gefunden+0x1, sucher_string_2);
+        fundort_adresse = strstr(fundort_adresse+0x1, sucher_string_2);
     }
 
 return zähler;
