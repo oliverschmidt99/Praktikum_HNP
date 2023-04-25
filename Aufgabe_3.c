@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> 
@@ -6,17 +7,16 @@
 
 
 /**
- * @brief  Ein String soll im "Memory Dumper" ausgegeben werden. Zudem soll
+*   @brief  Ein String soll im "Memory Dumper" ausgegeben werden. Zudem soll
             die Adresse des dazugehörigen Sting angegeben werden.
-
-  @param kopie_string_1 Es wird die Kopie des String_1 übergeben und diese 
+*
+*   @param kopie_string_1 Es wird die Kopie des String_1 übergeben und diese 
                         soll im Memory-Dumper ausgegeben werden.
-   @param länge_string Es wird die Länge des String_[1] übergeben. Die Länge
+*   @param länge_string_1 Es wird die Länge des String_[1] übergeben. Die Länge
                         des Strings begrenzt die Ausgabe des Memory-Dumpers, sodass
                         nur so viele Zeilen gedruckt werden, wie nötig.
- * 
- */
-void memdump(char *kopie_string_1, int länge_string);
+*/
+void memdump(char *kopie_string_1, int länge_string_1);
 /**
  * @brief Die Funktion findstring soll die gleiche Struktur wie im zweiten
  *        String finden, indem sie den ersten String durchsucht. Die gefundenen
@@ -36,14 +36,14 @@ int findstring(char *sucher_string_2, char **pointer_adressen);
  *          memdumb und findstring. In Bytes wird die Größe des Strings ermittelt.  
  * 
  * @param argc gibt die Anzahl an Argumenten an. Bsp. ./Aufgabe_3 <string> <string> dann ist argc gleich 3.
- * @param argv gibt ein Arry der Argumente an. wenn <string> = "Hallo" beinhaltet bekommt argv "Hallo".
+ * @param argv gibt ein Array der Argumente an. wenn <string> = "Hallo" beinhaltet bekommt argv "Hallo".
  * @return int der Rückgabewert return 0; ist dann, wenn das Programm kein Fehler hat. Wenn return 1;, dann Fehler.
- *
  */
 int main(int argc, char **argv){
 
 printf("\n");
 
+    
     /**
      * @if (argc != 3)
      * Bei der Ausführung des Programms müssen drei Strings angegeben werden.
@@ -51,8 +51,9 @@ printf("\n");
      * Wenn weniger oder mehr Elemente angegeben werden, wird das Programm
      * mit einem Fehler beendet und ein Fehler wird ausgegeben.
      */
-    if(argc != 3){
-        printf("Usage: %s\n\n", argv[0]);
+    if(argc != 3)
+    {
+        printf("Usage: %s <string 1> <string 2>\n\n", argv[0]);
     return 1;
     }
     else{
@@ -69,62 +70,58 @@ printf("\n");
      */
     char *adresse;
     /**
-     * @param länge_string hat die länge von dem ersten String.
+     * @param länge_string_1 hat die länge von dem ersten String.
      * 
      */
-    int länge_string;
+    int länge_string_1;
     /**
      * @param anzahl bekommt aus findstring die Anzahl von den gefundenen Elemente.
      * 
      */
     int anzahl;
 
-  
+   /**
+    * @brief Bestimmt die Länge von dem ersten String und gibt die Länge + 1 zurück.
+    *        Die Zeichenkette muss um 1 erhöht werden, wegen dem NULLByte.
+    */
+    länge_string_1 = strlen(argv[1]) + 1;
+
     /**
-     * @brief Bestimmt die Länge von dem ersten String und gibt die Länge + 1 zurück.
-      Die Zeichenkette muss um 1 erhöht werden, wegen dem NULLByte. Um eine Kopie für
-      den ersten String zu machen muss speicher im Heap erzeugt werden.
+     * @brief Die Zeichenkette muss auf dem Heap gespeicht werden
      * 
+     * @param länge_string_1 gibt die länge für den Speicher auf den Heap vor!
+     * 
+     * @return kopie
      */
-    länge_string = strlen(argv[1]) + 1;
-    kopie_string_1 = malloc(länge_string);
+    kopie_string_1 = malloc(länge_string_1);
     strcpy(kopie_string_1, argv[1]);
 
-        /**
-         * @brief NULL Pointer muss überprüft werden.
 
-        @if
-        Wennn in dem ersten String nichts steht, soll  das Programm beendet werden
-         */
-        if(*kopie_string_1 == 0){
-            printf("Speicher konnte nicht zugewiesen werden.\n\n");
-            return 1;                        
-        }
+    if(*kopie_string_1 == 0)                     
+    {
+        printf("Usage: %s <empty> <string 2>\n\n", argv[0]);
+        return 1;                        
+    }
+    else if(*argv[2]== 0)  {
+        printf("Usage: %s <string 1> <empty>\n\n", argv[0]);
+        return 1;                        
+    }
 
-    printf("Laenge der Zeichenkette (inkl. \\0): %zu Byte(s)\n", (size_t)länge_string);
+
+    printf("Laenge der Zeichenkette (inkl. \\0): %zu Byte(s)\n", (size_t)länge_string_1);
     printf("Suchkriterium: '%s'\n\n", argv[2]);
 
-    /**
-     * @brief Der erste String wird im Memory Dump ausgeben.
-     * 
-     */
-    memdump(kopie_string_1, länge_string);
+    memdump(kopie_string_1, länge_string_1);
     adresse = kopie_string_1;
 
-        /**
-        * @brief Construct a new if object
-            @if
-            Wenn der String 2 ungleich Null ist soll der String 2 zu der Funktion findstring übergeben werden. 
-            @else
-            Wenn der Wert NULL ist giebt es nichts zu suchen, somit kann die Anzahl 0 sein und die Adresse.
-        */
-        if(argv[2] != 0){
-            anzahl = findstring(argv[2], &adresse);
-        }
-        else{
-            anzahl = 0;
-            adresse = 0;
-        }
+    if(argv[2] != 0){
+        anzahl = findstring(argv[2], &adresse);
+    }
+    else{
+        anzahl = 0;
+        adresse = 0;
+    }
+
 
     printf("Die Suchzeichenkette wurde %d mal gefunden. (Zuerst an der Addresse: %p)\n", anzahl, adresse);
     free(kopie_string_1);
@@ -142,43 +139,33 @@ return 0;
 //--------------------------------------------------------------------------
 
 
+
+
 void memdump(char *kopie_string_1, int länge_string){
 
 /**
  * @param i Das ist eine Laufvariable, die die Zeilen des memdumps zählt.
  * 
  */
-int i = 0;
+int i = 0x0;
 /**
  * @param k Zählt die Zeichen, die im memdump dargestellt werden sollen, sodass nur 16 Zeichen in eine Zeile kommen.
  * 
  */
-int k = 0;
+int k = 0x0;
 
     printf("ADDR\t\t0123456789ABCDEF\n");
 
     /*Die Schleife zählt die Zeilen, bis die länge_string erreicht ist. Die Adresse
     wird um 0xF aufaddiert, da sie nicht bei null anfangen darf.
     */
-    for(i = 0; i < länge_string; i += 0xF){
+    for(i = 0x0; i < länge_string; i += 0x10){
         printf("%p\t", &kopie_string_1[i]);
         /*Die Schleife gibt jedes Zeichen des kopierten Strings in das Memdump aus.
          Nur Zeichen bis 0xF werden angezeigt, da nur 16 ASCII-Zeichen in einer Zeile passen.
         */
-        for(k = 0; k < 0xF; k++){
+        for(k = 0x0; k <= 0xF; k++){
 
-
-
-            /**
-             * @brief
-             * 
-             * @if
-             * 
-             * @if
-             * 
-             * @else
-             * 
-             */
             if ((i + k)/0xF < länge_string) {
                 
                 if(kopie_string_1[i+k] >= 0x20 && kopie_string_1[i+k] <= 0x7e){
@@ -192,7 +179,7 @@ int k = 0;
         printf("\n");
     }
 printf("\n");
-retrun void;
+return;
 }
 
 
@@ -217,7 +204,7 @@ char *gefunden = strstr(*pointer_adresse, sucher_string_2);
 
     while(gefunden){
         zähler ++;
-        gefunden = strstr(gefunden +  1, sucher_string_2);
+        gefunden = strstr(gefunden+1, sucher_string_2);
     }
 
 return zähler;
