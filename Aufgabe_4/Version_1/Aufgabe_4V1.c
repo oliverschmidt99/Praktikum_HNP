@@ -54,6 +54,13 @@ tperiode    equ 200     ; Periodendauer des PWM-Signals
 trechts     equ 10      ; Dauer fuer Rechts
 tlinks      equ 20      ; Dauer fuer Links
 
+
+
+
+;------------------------------------------------------------------------------------------------------
+
+
+
 start:
 
 ; Initialisierung
@@ -81,11 +88,9 @@ again:
 ; Interruptserviceroutinen nicht laufen (Hintergrundprogramm). Das wäre z.B. 
 ; die Manipulation des Statusbits und die Ausgabe auf das Display.
 
-
-	mov al, [status] 
-	
+	;Die Lichtschranke 
+	mov al, [status]
 	out leds, al
-	
 	and al, ~1
 	mov [status], al
 	
@@ -93,9 +98,15 @@ again:
 
 
 	jmp again
+
+
+
+
+;------------------------------------------------------------------------------------------------------
+
+
         
 ; Initialisierung Controller und Interruptsystem
-
 init:
     cli                         ; Interrupts aus
 
@@ -141,6 +152,14 @@ init:
     sti                         ; ab jetzt Interrupts
     ret
 
+
+;------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 isr_1:
     push ax
 
@@ -153,15 +172,16 @@ isr_1:
     mov [status], al
 
 
-
-
-
-
 isr1:
     mov al, eoi                 ; EOI an PIC
     out ocw_2_3, al
     pop ax
     iret
+    
+    
+    
+    
+    
     
 isr_2:
     push ax
@@ -170,6 +190,10 @@ isr_2:
 ; Hier ist z.B. der Programmcode einzufügen, um die entsprechende Position
 ; anzufahren. Ausgänge sind auch lesbar! Der gemeinsame Ausgang aus der ISR
 ; ist "isr2".
+
+
+
+
 
 isr2:
     mov al, eoi                 ; EOI an PIC
